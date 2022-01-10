@@ -123,7 +123,7 @@ public class MainApp {
 					contador++;
 					frame.tocaMoverse();
 				}
-//				frame.comprobarEstado(tablero.getHeight(), tablero.getWidth()); // comprobamos si hemos muerto o no.
+				frame.comprobarEstado(tablero.getHeight(), tablero.getWidth()); // comprobamos si hemos muerto o no.
 
 			} else { // Cada vez que no hay que moverse o crecer, simplemente contamos...
 				contador++;
