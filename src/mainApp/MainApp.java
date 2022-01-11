@@ -23,8 +23,8 @@ import ui.TableroJuego;
 
 public class MainApp {
 
-	static int speed;
-	static int maxCont;
+	static int speed = 0, maxCont = 0;
+	static int width = 0, length = 0;
 
 	public static void main(String[] args) throws InterruptedException {
 		// TODO code application logic here
@@ -32,7 +32,7 @@ public class MainApp {
 		int contador;
 		JFrame external;
 		MySnakeFrame frame;
-		JPanel options, center, centered1, centered2, centered3, centered4;
+		JPanel dificultad, center, centered1, centered2, centered3, centered4, centered5;
 		JPanel mainPanel;
 		TableroJuego tablero;
 		JPanel botonera;
@@ -40,7 +40,9 @@ public class MainApp {
 		JLabel puntosNum;
 		JButton start;
 		JButton pause;
-		JButton facil, normal, dificil, imposible, jugar;
+		JLabel dif, tam;
+		JButton facil, normal, dificil, imposible;
+		JButton pequeno, mediano, grande;
 		ControlTeclado miControlador;
 
 		// 1. Crear el frame.
@@ -67,7 +69,8 @@ public class MainApp {
 		tablero.setBackground(new java.awt.Color(0));
 		tablero.setSize(600, 400);
 
-		// Le damos un enlace al tablero para que sepa quién es su frame (ventana) y así
+		// Le damos un enlace al tablero para que sepa quién es su frame (ventana) y
+		// así
 		// sepa
 		// quién contiene la serpiente y quién controla el juego...
 		tablero.setSnakeFrame(frame);
@@ -116,20 +119,24 @@ public class MainApp {
 		mainPanel.add(tablero, BorderLayout.CENTER);
 
 		external = new JFrame();
-		options = new JPanel(new BorderLayout());
+		dificultad = new JPanel(new BorderLayout());
 		center = new JPanel();
 		center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
-		
+
 		centered1 = new JPanel();
 		centered2 = new JPanel();
 		centered3 = new JPanel();
 		centered4 = new JPanel();
-		
+		centered5 = new JPanel();
+
 		centered1.setLayout(new BoxLayout(centered1, BoxLayout.X_AXIS));
 		centered2.setLayout(new BoxLayout(centered2, BoxLayout.X_AXIS));
 		centered3.setLayout(new BoxLayout(centered3, BoxLayout.X_AXIS));
 		centered4.setLayout(new BoxLayout(centered4, BoxLayout.X_AXIS));
+		centered5.setLayout(new BoxLayout(centered5, BoxLayout.X_AXIS));
 
+		dif = new JLabel("Elige la dificultad");
+		tam = new JLabel("Elige las dimensiones del mapa");
 
 		facil = new JButton();
 		facil.setSize(50, 20);
@@ -146,13 +153,25 @@ public class MainApp {
 		imposible = new JButton();
 		imposible.setSize(50, 20);
 		imposible.setText("Imposible");
-		
+
+		pequeno = new JButton();
+		pequeno.setSize(50, 20);
+		pequeno.setText("Pequeno");
+
+		mediano = new JButton();
+		mediano.setSize(50, 20);
+		mediano.setText("Mediano");
+
+		grande = new JButton();
+		grande.setSize(50, 20);
+		grande.setText("Grande");
 
 		Component vg1 = Box.createVerticalGlue();
 		Component vg2 = Box.createVerticalGlue();
 		Component vg3 = Box.createVerticalGlue();
 		Component vg4 = Box.createVerticalGlue();
 		Component vg5 = Box.createVerticalGlue();
+		Component vg6 = Box.createVerticalGlue();
 
 		Component hg1 = Box.createHorizontalGlue();
 		Component hg2 = Box.createHorizontalGlue();
@@ -162,42 +181,56 @@ public class MainApp {
 		Component hg6 = Box.createHorizontalGlue();
 		Component hg7 = Box.createHorizontalGlue();
 		Component hg8 = Box.createHorizontalGlue();
+		Component hg9 = Box.createHorizontalGlue();
+		Component hg10 = Box.createHorizontalGlue();
 
 		center.add(vg1);
-		
+
 		center.add(centered1);
 		centered1.add(hg1);
-		centered1.add(facil);
+		centered1.add(dif);
+		centered1.add(tam);
+		tam.setVisible(false);
 		centered1.add(hg2);
-		
+
 		center.add(vg2);
-		
+
 		center.add(centered2);
 		centered2.add(hg3);
-		centered2.add(normal);
+		centered2.add(facil);
+		centered2.add(pequeno);
+		pequeno.setVisible(false);
 		centered2.add(hg4);
-		
+
 		center.add(vg3);
-		
+
 		center.add(centered3);
 		centered3.add(hg5);
-		centered3.add(dificil);
+		centered3.add(normal);
+		centered3.add(mediano);
+		mediano.setVisible(false);
 		centered3.add(hg6);
-		
+
 		center.add(vg4);
 
 		center.add(centered4);
 		centered4.add(hg7);
-		centered4.add(imposible);
+		centered4.add(dificil);
+		centered4.add(grande);
+		grande.setVisible(false);
 		centered4.add(hg8);
-		
+
 		center.add(vg5);
 
-		options.add(center, BorderLayout.CENTER);
-		frame.add(mainPanel);
+		center.add(centered5);
+		centered5.add(hg9);
+		centered5.add(imposible);
+		centered5.add(hg10);
 
-		external.add(options);
+		center.add(vg6);
 
+		dificultad.add(center, BorderLayout.CENTER);
+		external.add(dificultad);
 		external.setSize(600, 600);
 		external.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -206,32 +239,104 @@ public class MainApp {
 		while (!isDifficulty()) {
 			facil.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					external.setVisible(false);
+					dif.setVisible(false);
+					facil.setVisible(false);
+					normal.setVisible(false);
+					dificil.setVisible(false);
+					imposible.setVisible(false);
+
+					tam.setVisible(true);
+					pequeno.setVisible(true);
+					mediano.setVisible(true);
+					grande.setVisible(true);
+
 					setDifficulty(1);
 				}
 			});
-			
+
 			normal.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					external.setVisible(false);
+					dif.setVisible(false);
+					facil.setVisible(false);
+					normal.setVisible(false);
+					dificil.setVisible(false);
+					imposible.setVisible(false);
+
+					tam.setVisible(true);
+					pequeno.setVisible(true);
+					mediano.setVisible(true);
+					grande.setVisible(true);
+
 					setDifficulty(2);
 				}
 			});
-			
+
 			dificil.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					external.setVisible(false);
+					dif.setVisible(false);
+					facil.setVisible(false);
+					normal.setVisible(false);
+					dificil.setVisible(false);
+					imposible.setVisible(false);
+
+					tam.setVisible(true);
+					pequeno.setVisible(true);
+					mediano.setVisible(true);
+					grande.setVisible(true);
+
 					setDifficulty(3);
 				}
 			});
-			
+
 			imposible.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					external.setVisible(false);
+					dif.setVisible(false);
+					facil.setVisible(false);
+					normal.setVisible(false);
+					dificil.setVisible(false);
+					imposible.setVisible(false);
+
+					tam.setVisible(true);
+					pequeno.setVisible(true);
+					mediano.setVisible(true);
+					grande.setVisible(true);
+
 					setDifficulty(4);
 				}
 			});
 		}
+
+		while (!isArea()) {
+			pequeno.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+
+					setArea(400, 400);
+				}
+			});
+
+			mediano.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+
+					setArea(600, 600);
+				}
+			});
+
+			grande.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+
+					setArea(1000, 1000);
+				}
+			});
+		}
+
+		frame.setSize(width, length);
+
+		tablero.setSize(width, length - 200);
+
+		frame.add(mainPanel);
 
 		contador = 0; // nuestro control de los pasos del tiempo. Cada vez que contador cuenta un
 						// paso, pasan 10ms
@@ -272,35 +377,44 @@ public class MainApp {
 		}
 	}
 
-	private static boolean setDifficulty(int num) {
+	private static void setDifficulty(int num) {
 		switch (num) {
 		case 1:
 			speed = 35;
 			maxCont = 70;
-			return true;
+			break;
 
 		case 2:
 			speed = 25;
 			maxCont = 50;
-			return true;
+			break;
 
 		case 3:
 			speed = 15;
 			maxCont = 45;
-			return true;
+			break;
 
 		case 4:
 			speed = 5;
 			maxCont = 5;
-			return true;
-
-		default:
-			return false;
+			break;
 		}
 	}
 
 	private static boolean isDifficulty() {
 		if (speed != 0)
+			return true;
+		else
+			return false;
+	}
+
+	private static void setArea(int w, int l) {
+		width = w;
+		length = l;
+	}
+
+	private static boolean isArea() {
+		if (width != 0)
 			return true;
 		else
 			return false;
