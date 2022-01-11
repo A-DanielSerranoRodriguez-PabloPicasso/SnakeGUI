@@ -1,9 +1,15 @@
 package mainApp;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,11 +23,16 @@ import ui.TableroJuego;
 
 public class MainApp {
 
+	static int speed;
+	static int maxCont;
+
 	public static void main(String[] args) throws InterruptedException {
 		// TODO code application logic here
 
 		int contador;
+		JFrame external;
 		MySnakeFrame frame;
+		JPanel options, center, centered1, centered2, centered3, centered4;
 		JPanel mainPanel;
 		TableroJuego tablero;
 		JPanel botonera;
@@ -29,6 +40,7 @@ public class MainApp {
 		JLabel puntosNum;
 		JButton start;
 		JButton pause;
+		JButton facil, normal, dificil, imposible, jugar;
 		ControlTeclado miControlador;
 
 		// 1. Crear el frame.
@@ -102,19 +114,135 @@ public class MainApp {
 
 		mainPanel.add(botonera, BorderLayout.PAGE_END);
 		mainPanel.add(tablero, BorderLayout.CENTER);
+
+		external = new JFrame();
+		options = new JPanel(new BorderLayout());
+		center = new JPanel();
+		center.setLayout(new BoxLayout(center, BoxLayout.Y_AXIS));
+		
+		centered1 = new JPanel();
+		centered2 = new JPanel();
+		centered3 = new JPanel();
+		centered4 = new JPanel();
+		
+		centered1.setLayout(new BoxLayout(centered1, BoxLayout.X_AXIS));
+		centered2.setLayout(new BoxLayout(centered2, BoxLayout.X_AXIS));
+		centered3.setLayout(new BoxLayout(centered3, BoxLayout.X_AXIS));
+		centered4.setLayout(new BoxLayout(centered4, BoxLayout.X_AXIS));
+
+
+		facil = new JButton();
+		facil.setSize(50, 20);
+		facil.setText("Facil");
+
+		normal = new JButton();
+		normal.setSize(50, 20);
+		normal.setText("Normal");
+
+		dificil = new JButton();
+		dificil.setSize(50, 20);
+		dificil.setText("Dificil");
+
+		imposible = new JButton();
+		imposible.setSize(50, 20);
+		imposible.setText("Imposible");
+		
+
+		Component vg1 = Box.createVerticalGlue();
+		Component vg2 = Box.createVerticalGlue();
+		Component vg3 = Box.createVerticalGlue();
+		Component vg4 = Box.createVerticalGlue();
+		Component vg5 = Box.createVerticalGlue();
+
+		Component hg1 = Box.createHorizontalGlue();
+		Component hg2 = Box.createHorizontalGlue();
+		Component hg3 = Box.createHorizontalGlue();
+		Component hg4 = Box.createHorizontalGlue();
+		Component hg5 = Box.createHorizontalGlue();
+		Component hg6 = Box.createHorizontalGlue();
+		Component hg7 = Box.createHorizontalGlue();
+		Component hg8 = Box.createHorizontalGlue();
+
+		center.add(vg1);
+		
+		center.add(centered1);
+		centered1.add(hg1);
+		centered1.add(facil);
+		centered1.add(hg2);
+		
+		center.add(vg2);
+		
+		center.add(centered2);
+		centered2.add(hg3);
+		centered2.add(normal);
+		centered2.add(hg4);
+		
+		center.add(vg3);
+		
+		center.add(centered3);
+		centered3.add(hg5);
+		centered3.add(dificil);
+		centered3.add(hg6);
+		
+		center.add(vg4);
+
+		center.add(centered4);
+		centered4.add(hg7);
+		centered4.add(imposible);
+		centered4.add(hg8);
+		
+		center.add(vg5);
+
+		options.add(center, BorderLayout.CENTER);
 		frame.add(mainPanel);
 
-		frame.setVisible(true); // activamos la ventana principal para que sea "pintable"
+		external.add(options);
+
+		external.setSize(600, 600);
+		external.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		external.setVisible(true);
+
+		while (!isDifficulty()) {
+			facil.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+					setDifficulty(1);
+				}
+			});
+			
+			normal.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+					setDifficulty(2);
+				}
+			});
+			
+			dificil.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+					setDifficulty(3);
+				}
+			});
+			
+			imposible.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					external.setVisible(false);
+					setDifficulty(4);
+				}
+			});
+		}
 
 		contador = 0; // nuestro control de los pasos del tiempo. Cada vez que contador cuenta un
 						// paso, pasan 10ms
-
+		frame.setVisible(true); // activamos la ventana principal para que sea "pintable"
+		external.repaint();
 		while (true) { // por siempre jamás (hasta que nos cierren la ventana) estamos controlando el
 						// juego.
 
 			// actualizamos el estado del juego
-			if (contador % 15 == 0) { // cada 200ms nos movemos o crecemos...
-				if (contador == 45) { // Cada 600ms crecemos y reseteamos el contador
+			if (contador % speed == 0) { // cada 200ms nos movemos o crecemos...
+				if (contador == maxCont) { // Cada 600ms crecemos y reseteamos el contador
 					contador = 0;
 					frame.tocaCrecer();
 					// hemos crecido... actualizamos puntos.
@@ -142,6 +270,40 @@ public class MainApp {
 			Thread.sleep(10);
 
 		}
+	}
+
+	private static boolean setDifficulty(int num) {
+		switch (num) {
+		case 1:
+			speed = 35;
+			maxCont = 70;
+			return true;
+
+		case 2:
+			speed = 25;
+			maxCont = 50;
+			return true;
+
+		case 3:
+			speed = 15;
+			maxCont = 45;
+			return true;
+
+		case 4:
+			speed = 5;
+			maxCont = 5;
+			return true;
+
+		default:
+			return false;
+		}
+	}
+
+	private static boolean isDifficulty() {
+		if (speed != 0)
+			return true;
+		else
+			return false;
 	}
 
 }
