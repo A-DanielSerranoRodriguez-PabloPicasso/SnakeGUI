@@ -93,12 +93,12 @@ public class MainApp {
 		start = new JButton();
 		start.setSize(50, 20);
 		start.setText("Start");
-		start.addActionListener(new MyButtonListener(frame, tablero, frame.getManzana()));
+		start.addActionListener(new MyButtonListener(frame, tablero));
 
 		pause = new JButton();
 		pause.setSize(50, 20);
 		pause.setText("Pause");
-		pause.addActionListener(new MyButtonListener(frame, tablero, frame.getManzana()));
+		pause.addActionListener(new MyButtonListener(frame, tablero));
 
 		// Preparamos el control del teclado
 		miControlador = new ControlTeclado();
@@ -348,19 +348,19 @@ public class MainApp {
 
 			// actualizamos el estado del juego
 			if (contador % speed == 0) { // cada 200ms nos movemos o crecemos...
-				contador++;
-				frame.tocaMoverse();
-				frame.comprobarEstado(tablero.getHeight(), tablero.getWidth()); // comprobamos si hemos muerto o no.
+				if (frame.tocandoManzana()) { // Cada 600ms crecemos y reseteamos el contador
+					contador = 0;
+					setPosiManzana(frame);
+					frame.tocaCrecer();
+					// hemos crecido... actualizamos puntos.
+					puntosNum.setText(Integer.toString(frame.getSerpiente().getPuntos()));
+				} else {
+					contador++;
+					frame.tocaMoverse();
+					frame.comprobarEstado(tablero.getHeight(), tablero.getWidth()); // comprobamos si hemos muerto o no.
+				}
 			} else { // Cada vez que no hay que moverse o crecer, simplemente contamos...
 				contador++;
-			}
-
-			if (frame.tocandoManzana()) { // Cada 600ms crecemos y reseteamos el contador
-				contador = 0;
-				setPosiManzana(frame);
-				frame.tocaCrecer();
-				// hemos crecido... actualizamos puntos.
-				puntosNum.setText(Integer.toString(frame.getSerpiente().getPuntos()));
 			}
 
 			// hemos terminado?? mostramos msg
