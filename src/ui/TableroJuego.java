@@ -17,6 +17,7 @@ import javax.swing.JPanel;
  *
  */
 
+@SuppressWarnings("serial")
 public class TableroJuego extends JPanel {
 
 	private MySnakeFrame snakeFrame;
@@ -36,6 +37,7 @@ public class TableroJuego extends JPanel {
 
 			// le decimos al controlador que nos de la serpiente para pintarla...
 			snakeFrame.getSerpiente().pintarse(g2d);
+			snakeFrame.getManzana().pintarse(g2d);
 		}
 	}
 }

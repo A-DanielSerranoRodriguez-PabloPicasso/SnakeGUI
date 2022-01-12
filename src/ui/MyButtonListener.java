@@ -4,18 +4,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
+
+import models.Manzana;
 
 public class MyButtonListener implements ActionListener {
 
 	private MySnakeFrame snakeFrame;
 	private TableroJuego tablero;
-	private JLabel puntos;
+	private Manzana manzana;
 
-	public MyButtonListener(MySnakeFrame sf, TableroJuego t) {
+	public MyButtonListener(MySnakeFrame sf, TableroJuego t, Manzana m) {
 		snakeFrame = sf;
 		tablero = t;
-
+		manzana = m;
 	}
 
 	@Override
@@ -28,6 +29,21 @@ public class MyButtonListener implements ActionListener {
 			snakeFrame.pausaContinuaJuego();
 			tablero.requestFocus();
 		}
+	}
+
+	private void setPosiManzana() {
+		int posXinicial = (int) (Math.random() * ((tablero.getWidth() - 199))), posYinicial = (int) (Math.random() * ((tablero.getHeight() - 199)));
+		while (posXinicial % 20 != 0) {
+			posXinicial = (int) (Math.random() * ((tablero.getWidth() - 199)));
+		}
+
+		manzana.setX(posXinicial);
+
+		while (posYinicial % 20 != 0) {
+			posYinicial = (int) (Math.random() * ((tablero.getHeight() - 199)));
+		}
+
+		manzana.setY(posYinicial);
 	}
 
 }

@@ -1,11 +1,7 @@
 package models;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-
-import javax.swing.JPanel;
 
 public class Cuadrado {
 	// Constantes. Son las direcciones en las que nuestro cuadrado puede moverse
@@ -17,11 +13,11 @@ public class Cuadrado {
 	// Atributos -- Estado
 
 	// Necesitamos la posición del cuadrado marcado por su esquina superior izq.
-	private int posX;
-	private int posY;
+	protected int posX;
+	protected int posY;
 
 	// También necesitamos el lado del cuadrado
-	private int lado;
+	protected int lado;
 
 	// Ahora el color
 	private int colorCuadrado;

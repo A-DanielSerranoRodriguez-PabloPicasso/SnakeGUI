@@ -1,7 +1,6 @@
 package mainApp;
 
 import java.awt.BorderLayout;
-import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -29,7 +28,7 @@ public class MainApp {
 	public static void main(String[] args) throws InterruptedException {
 		// TODO code application logic here
 
-		int contador;
+		long contador;
 		JFrame external;
 		MySnakeFrame frame;
 		JPanel dificultad, center, centered1, centered2, centered3, centered4, centered5;
@@ -94,12 +93,12 @@ public class MainApp {
 		start = new JButton();
 		start.setSize(50, 20);
 		start.setText("Start");
-		start.addActionListener(new MyButtonListener(frame, tablero));
+		start.addActionListener(new MyButtonListener(frame, tablero, frame.getManzana()));
 
 		pause = new JButton();
 		pause.setSize(50, 20);
 		pause.setText("Pause");
-		pause.addActionListener(new MyButtonListener(frame, tablero));
+		pause.addActionListener(new MyButtonListener(frame, tablero, frame.getManzana()));
 
 		// Preparamos el control del teclado
 		miControlador = new ControlTeclado();
@@ -336,6 +335,8 @@ public class MainApp {
 
 		tablero.setSize(width, length - 200);
 
+		setPosiManzana(frame);
+
 		frame.add(mainPanel);
 
 		contador = 0; // nuestro control de los pasos del tiempo. Cada vez que contador cuenta un
@@ -347,25 +348,26 @@ public class MainApp {
 
 			// actualizamos el estado del juego
 			if (contador % speed == 0) { // cada 200ms nos movemos o crecemos...
-				if (contador == maxCont) { // Cada 600ms crecemos y reseteamos el contador
-					contador = 0;
-					frame.tocaCrecer();
-					// hemos crecido... actualizamos puntos.
-					puntosNum.setText(Integer.toString(frame.getSerpiente().getPuntos()));
-				} else { // a los 200 y 400 ms nos movemos...
-					contador++;
-					frame.tocaMoverse();
-				}
+				contador++;
+				frame.tocaMoverse();
 				frame.comprobarEstado(tablero.getHeight(), tablero.getWidth()); // comprobamos si hemos muerto o no.
-
 			} else { // Cada vez que no hay que moverse o crecer, simplemente contamos...
 				contador++;
+			}
+
+			if (frame.tocandoManzana()) { // Cada 600ms crecemos y reseteamos el contador
+				contador = 0;
+				setPosiManzana(frame);
+				frame.tocaCrecer();
+				// hemos crecido... actualizamos puntos.
+				puntosNum.setText(Integer.toString(frame.getSerpiente().getPuntos()));
 			}
 
 			// hemos terminado?? mostramos msg
 			if (frame.mostrarFin()) {
 				JOptionPane.showMessageDialog(frame,
 						"Se acabo vaquero, has conseguido " + puntosNum.getText() + " puntos");
+				setPosiManzana(frame);
 			}
 
 			// Repintamos
@@ -418,6 +420,21 @@ public class MainApp {
 			return true;
 		else
 			return false;
+	}
+
+	private static void setPosiManzana(MySnakeFrame f) {
+		int posX = (int) (Math.random() * ((width - 199))), posY = (int) (Math.random() * ((length - 199)));
+		while (posX % 20 != 0) {
+			posX = (int) (Math.random() * ((width - 199)));
+		}
+
+		f.getManzana().setX(posX);
+
+		while (posY % 20 != 0) {
+			posY = (int) (Math.random() * ((length - 199)));
+		}
+
+		f.getManzana().setY(posY);
 	}
 
 }

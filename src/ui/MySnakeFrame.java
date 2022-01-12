@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.JFrame;
 
+import models.Manzana;
 import models.Serpiente;
 
 /**
@@ -28,6 +29,7 @@ import models.Serpiente;
  *
  */
 
+@SuppressWarnings("serial")
 public class MySnakeFrame extends JFrame {
 
 	// ***** estado
@@ -42,12 +44,15 @@ public class MySnakeFrame extends JFrame {
 	// semáforos para mostrar mensaje al final, sólo una vez.
 	private boolean mostrarFinal;
 	private boolean mostrado;
+	
+	private Manzana manzana;
 
 	// **** Comportamientos
 
 	// Constructor
 	public MySnakeFrame() {
 		snake = new Serpiente();
+		manzana = new Manzana();
 		jugando = false;
 		mostrarFinal = false;
 		mostrado = false;
@@ -57,6 +62,10 @@ public class MySnakeFrame extends JFrame {
 	// si alguien necesita nuestra serpiente, se la proporcionamos.
 	public Serpiente getSerpiente() {
 		return snake;
+	}
+	
+	public Manzana getManzana() {
+		return manzana;
 	}
 
 	// tenemos que mostrar la ventanita de final de partida??? Sólo una vez...
@@ -116,5 +125,9 @@ public class MySnakeFrame extends JFrame {
 	// nos han pulsado tecla, cambiamos de dirección.
 	public void cambiaDireccion(int key) {
 		snake.cambiaDireccion(key);
+	}
+	
+	public boolean tocandoManzana() {
+		return this.snake.tocandoManzana(this.manzana);
 	}
 }
