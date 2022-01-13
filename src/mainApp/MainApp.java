@@ -383,18 +383,18 @@ public class MainApp {
 	private static void setDifficulty(int num) {
 		switch (num) {
 		case 1:
-			speed = 35;
-			maxCont = 50;
+			speed = 30;
+			maxCont = 30;
 			break;
 
 		case 2:
-			speed = 25;
-			maxCont = 40;
+			speed = 15;
+			maxCont = 15;
 			break;
 
 		case 3:
-			speed = 15;
-			maxCont = 35;
+			speed = 5;
+			maxCont = 5;
 			break;
 
 		case 4:
