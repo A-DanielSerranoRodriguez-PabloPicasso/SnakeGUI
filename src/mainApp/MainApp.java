@@ -230,7 +230,7 @@ public class MainApp {
 
 		dificultad.add(center, BorderLayout.CENTER);
 		external.add(dificultad);
-		external.setSize(600, 600);
+		external.setSize(601, 601);
 		external.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		external.setVisible(true);
@@ -330,13 +330,14 @@ public class MainApp {
 				}
 			});
 		}
-
+		
 		frame.setSize(width, length);
 
 		tablero.setSize(width, length - 200);
+		setLugar(frame, tablero.getWidth(), tablero.getHeight());
 
-		setPosiManzana(frame);
-
+		setPosiManzana(frame, tablero);
+		
 		frame.add(mainPanel);
 
 		contador = 0; // nuestro control de los pasos del tiempo. Cada vez que contador cuenta un
@@ -350,7 +351,7 @@ public class MainApp {
 			if (contador % speed == 0) { // cada 200ms nos movemos o crecemos...
 				if (frame.tocandoManzana()) { // Cada 600ms crecemos y reseteamos el contador
 					contador = 0;
-					setPosiManzana(frame);
+					setPosiManzana(frame,tablero);
 					frame.tocaCrecer();
 					// hemos crecido... actualizamos puntos.
 					puntosNum.setText(Integer.toString(frame.getSerpiente().getPuntos()));
@@ -367,7 +368,7 @@ public class MainApp {
 			if (frame.mostrarFin()) {
 				JOptionPane.showMessageDialog(frame,
 						"Se acabo vaquero, has conseguido " + puntosNum.getText() + " puntos");
-				setPosiManzana(frame);
+				setPosiManzana(frame, tablero);
 			}
 
 			// Repintamos
@@ -383,22 +384,22 @@ public class MainApp {
 		switch (num) {
 		case 1:
 			speed = 35;
-			maxCont = 70;
+			maxCont = 50;
 			break;
 
 		case 2:
 			speed = 25;
-			maxCont = 50;
+			maxCont = 40;
 			break;
 
 		case 3:
 			speed = 15;
-			maxCont = 45;
+			maxCont = 35;
 			break;
 
 		case 4:
-			speed = 5;
-			maxCont = 5;
+			speed = 1;
+			maxCont = 1;
 			break;
 		}
 	}
@@ -414,6 +415,11 @@ public class MainApp {
 		width = w;
 		length = l;
 	}
+	
+	private static void setLugar(MySnakeFrame f,int x, int y) {
+		f.getSerpiente().getSerpiente().get(0).setX(x/2);
+		f.getSerpiente().getSerpiente().get(0).setY(y/2);
+	}
 
 	private static boolean isArea() {
 		if (width != 0)
@@ -422,18 +428,30 @@ public class MainApp {
 			return false;
 	}
 
-	private static void setPosiManzana(MySnakeFrame f) {
-		int posX = (int) (Math.random() * ((width - 199))), posY = (int) (Math.random() * ((length - 199)));
+	private static void setPosiManzana(MySnakeFrame f, TableroJuego t) {
+		int lado = f.getSerpiente().getSerpiente().get(0).getLado();
+		int posX = (int) (Math.random() * t.getWidth()),
+				posY = (int) (Math.random() * t.getHeight());
 		while (posX % 20 != 0) {
-			posX = (int) (Math.random() * ((width - 199)));
+			posX = (int) (Math.random() * t.getWidth());
 		}
-
-		f.getManzana().setX(posX);
-
 		while (posY % 20 != 0) {
-			posY = (int) (Math.random() * ((length - 199)));
+			posY = (int) (Math.random() * t.getHeight());
+		}
+		
+		if (posX > f.getWidth() - lado && posX != t.getWidth()) {
+			posX = t.getWidth() - (lado);
+		} else if (posY > f.getHeight() - lado && posY != t.getHeight()) {
+			posY = t.getHeight() - (lado);
+		}
+		if (posX < 0 + lado && posX != 0) {
+			posX = 0 - (lado);
+		} else if (posY < 0 + lado && posY != 0) {
+			posY = 0 - (lado);
 		}
 
+		
+		f.getManzana().setX(posX);
 		f.getManzana().setY(posY);
 	}
 

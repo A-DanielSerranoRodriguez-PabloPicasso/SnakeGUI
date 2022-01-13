@@ -65,6 +65,14 @@ public class Cuadrado {
 	public int getY() {
 		return posY;
 	}
+	
+	public void setX(int x) {
+		this.posX = x;
+	}
+	
+	public void setY(int y) {
+		this.posY = y;
+	}
 
 	public int getLado() {
 		return lado;

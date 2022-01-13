@@ -2,6 +2,7 @@ package ui;
 
 import javax.swing.JFrame;
 
+import models.Cuadrado;
 import models.Manzana;
 import models.Serpiente;
 
@@ -15,15 +16,15 @@ import models.Serpiente;
  * 
  * Esta clase hereda de JFrame. JFrame es una ventana equivalente a un Form en
  * Gambas3 Nuestra ventana principal además del comportamiento y estado natural
- * a una ventana gráfica controlará todo el estado del juego. Como nuestro "game
- * loop" está codificado como "run forever" tenemos que tener algún objeto que
- * controle si el juego está pausado, empezado, terminado en todo momento, y que
- * a su vez le diga a la serpiente que se resetee, que se mueva, crezca, etc.
- * Para controlar el estado se usan "semáforos". Estos no son nada más que
- * booleanos. Cuando están a false sería el equivalente a "semáforo rojo" y
- * cuando están a true sería el equivalente a "semáforo verde" Estos semáforos
- * se ponen en una serie de "if" que permiten controlar al objeto MySnakeFrame
- * si se ejecuta alguna acción o no en la serpiente.
+ * a una ventana gráfica controlará todo el estado del juego. Como nuestro
+ * "game loop" está codificado como "run forever" tenemos que tener algún
+ * objeto que controle si el juego está pausado, empezado, terminado en todo
+ * momento, y que a su vez le diga a la serpiente que se resetee, que se mueva,
+ * crezca, etc. Para controlar el estado se usan "semáforos". Estos no son nada
+ * más que booleanos. Cuando están a false sería el equivalente a "semáforo
+ * rojo" y cuando están a true sería el equivalente a "semáforo verde" Estos
+ * semáforos se ponen en una serie de "if" que permiten controlar al objeto
+ * MySnakeFrame si se ejecuta alguna acción o no en la serpiente.
  * 
  * @author andres
  *
@@ -44,7 +45,7 @@ public class MySnakeFrame extends JFrame {
 	// semáforos para mostrar mensaje al final, sólo una vez.
 	private boolean mostrarFinal;
 	private boolean mostrado;
-	
+
 	private Manzana manzana;
 
 	// **** Comportamientos
@@ -63,7 +64,7 @@ public class MySnakeFrame extends JFrame {
 	public Serpiente getSerpiente() {
 		return snake;
 	}
-	
+
 	public Manzana getManzana() {
 		return manzana;
 	}
@@ -94,8 +95,10 @@ public class MySnakeFrame extends JFrame {
 	}
 
 	// han pulsado el botón de start, hay que ponerlo todo en orden.
-	public void empezarDeNuevo() {
+	public void empezarDeNuevo(int x, int y) {
 		snake = new Serpiente(); // nueva y flamante serpiente
+		snake.getSerpiente().get(0).setX(x/2);
+		snake.getSerpiente().get(0).setY(y/2);
 		jugando = true; // estamos jugando a partir de ¡YA!
 		mostrarFinal = false; // ni estamos al final ni mucho menos
 		mostrado = false; // hemos mostrado el msg de final
@@ -112,6 +115,16 @@ public class MySnakeFrame extends JFrame {
 				mostrarFinal = true;
 				mostrado = false;
 			}
+			for (Cuadrado parte : this.snake.getSerpiente()) {
+				if (parte.getX() < 0)
+					parte.setX(iAncho-parte.getLado());
+				if (parte.getY() < 0)
+					parte.setY(iAlto-parte.getLado());
+				if (parte.getX() == iAncho)
+					parte.setX(0);
+				if (parte.getY() == iAlto)
+					parte.setY(0);
+			}
 		}
 	}
 
@@ -126,7 +139,7 @@ public class MySnakeFrame extends JFrame {
 	public void cambiaDireccion(int key) {
 		snake.cambiaDireccion(key);
 	}
-	
+
 	public boolean tocandoManzana() {
 		return this.snake.tocandoManzana(this.manzana);
 	}

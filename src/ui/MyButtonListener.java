@@ -19,7 +19,7 @@ public class MyButtonListener implements ActionListener {
 	public void actionPerformed(ActionEvent ae) {
 		// TODO Auto-generated method stub
 		if (((JButton) ae.getSource()).getText() == "Start") {
-			snakeFrame.empezarDeNuevo();
+			snakeFrame.empezarDeNuevo(tablero.getWidth(), tablero.getHeight());
 			tablero.requestFocus();
 		} else { // Botón de pausar
 			snakeFrame.pausaContinuaJuego();
