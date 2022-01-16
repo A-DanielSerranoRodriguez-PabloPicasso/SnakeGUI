@@ -434,8 +434,8 @@ public class MainApp {
 
 		if (posX > f.getWidth() - (lado +6)) {
 			posX = t.getWidth() - (lado +6);
-		} else if (posY > f.getHeight() - (lado +6)) {
-			posY = t.getHeight() - (lado +6);
+		} else if (posY > f.getHeight() - (lado +5)) {
+			posY = t.getHeight() - (lado +5);
 		}
 		if (posX < 0 + lado && posX != 0) {
 			posX = 1;
