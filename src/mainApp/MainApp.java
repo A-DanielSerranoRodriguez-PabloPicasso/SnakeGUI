@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import models.Cuadrado;
 import ui.ControlTeclado;
 import ui.MyButtonListener;
 import ui.MySnakeFrame;
@@ -425,23 +426,34 @@ public class MainApp {
 	private static void setPosiManzana(MySnakeFrame f, TableroJuego t) {
 		int lado = f.getSerpiente().getSerpiente().get(0).getLado();
 		int posX = (int) (Math.random() * t.getWidth()), posY = (int) (Math.random() * t.getHeight());
-		while (posX % 20 != 0) {
-			posX = (int) ((Math.random() * t.getWidth()));
-		}
-		while (posY % 20 != 0) {
-			posY = (int) ((Math.random() * t.getHeight()));
-		}
+		boolean encima;
 
-		if (posX > f.getWidth() - (lado +6)) {
-			posX = t.getWidth() - (lado +6);
-		} else if (posY > f.getHeight() - (lado +5)) {
-			posY = t.getHeight() - (lado +5);
-		}
-		if (posX < 0 + lado && posX != 0) {
-			posX = 1;
-		} else if (posY < 0 + lado && posY != 0) {
-			posY = 1;
-		}
+		do {
+			while (posX % 20 != 0) {
+				posX = (int) ((Math.random() * t.getWidth()));
+			}
+			while (posY % 20 != 0) {
+				posY = (int) ((Math.random() * t.getHeight()));
+			}
+
+			if (posX > f.getWidth() - (lado + 6)) {
+				posX = t.getWidth() - (lado + 6);
+			} else if (posY > t.getHeight() - (lado + 5)) {
+				posY = t.getHeight() - (lado + 5);
+			}
+			if (posX < 0 + lado && posX != 0) {
+				posX = 1;
+			} else if (posY < 0 + lado && posY != 0) {
+				posY = 1;
+			}
+
+			encima = false;
+			for (Cuadrado parte : f.getSerpiente().getSerpiente()) {
+				if (parte.getX() == posX && parte.getY() == posY) {
+					encima = true;
+				}
+			}
+		} while (encima);
 
 		f.getManzana().setX(posX);
 		f.getManzana().setY(posY);
