@@ -330,14 +330,13 @@ public class MainApp {
 				}
 			});
 		}
-		
+
 		frame.setSize(width, length);
 
 		tablero.setSize(width, length - 200);
-		setLugar(frame, tablero.getWidth(), tablero.getHeight());
 
 		setPosiManzana(frame, tablero);
-		
+
 		frame.add(mainPanel);
 
 		contador = 0; // nuestro control de los pasos del tiempo. Cada vez que contador cuenta un
@@ -351,7 +350,7 @@ public class MainApp {
 			if (contador % speed == 0) { // cada 200ms nos movemos o crecemos...
 				if (frame.tocandoManzana()) { // Cada 600ms crecemos y reseteamos el contador
 					contador = 0;
-					setPosiManzana(frame,tablero);
+					setPosiManzana(frame, tablero);
 					frame.tocaCrecer();
 					// hemos crecido... actualizamos puntos.
 					puntosNum.setText(Integer.toString(frame.getSerpiente().getPuntos()));
@@ -383,13 +382,13 @@ public class MainApp {
 	private static void setDifficulty(int num) {
 		switch (num) {
 		case 1:
-			speed = 30;
-			maxCont = 30;
+			speed = 40;
+			maxCont = 40;
 			break;
 
 		case 2:
-			speed = 15;
-			maxCont = 15;
+			speed = 20;
+			maxCont = 20;
 			break;
 
 		case 3:
@@ -415,11 +414,6 @@ public class MainApp {
 		width = w;
 		length = l;
 	}
-	
-	private static void setLugar(MySnakeFrame f,int x, int y) {
-		f.getSerpiente().getSerpiente().get(0).setX(x/2);
-		f.getSerpiente().getSerpiente().get(0).setY(y/2);
-	}
 
 	private static boolean isArea() {
 		if (width != 0)
@@ -430,27 +424,25 @@ public class MainApp {
 
 	private static void setPosiManzana(MySnakeFrame f, TableroJuego t) {
 		int lado = f.getSerpiente().getSerpiente().get(0).getLado();
-		int posX = (int) (Math.random() * t.getWidth()),
-				posY = (int) (Math.random() * t.getHeight());
+		int posX = (int) (Math.random() * t.getWidth()), posY = (int) (Math.random() * t.getHeight());
 		while (posX % 20 != 0) {
-			posX = (int) (Math.random() * t.getWidth());
+			posX = (int) ((Math.random() * t.getWidth()));
 		}
 		while (posY % 20 != 0) {
-			posY = (int) (Math.random() * t.getHeight());
-		}
-		
-		if (posX > f.getWidth() - lado && posX != t.getWidth()) {
-			posX = t.getWidth() - (lado);
-		} else if (posY > f.getHeight() - lado && posY != t.getHeight()) {
-			posY = t.getHeight() - (lado);
-		}
-		if (posX < 0 + lado && posX != 0) {
-			posX = 0 - (lado);
-		} else if (posY < 0 + lado && posY != 0) {
-			posY = 0 - (lado);
+			posY = (int) ((Math.random() * t.getHeight()));
 		}
 
-		
+		if (posX > f.getWidth() - (lado +6)) {
+			posX = t.getWidth() - (lado +6);
+		} else if (posY > f.getHeight() - (lado +6)) {
+			posY = t.getHeight() - (lado +6);
+		}
+		if (posX < 0 + lado && posX != 0) {
+			posX = 1;
+		} else if (posY < 0 + lado && posY != 0) {
+			posY = 1;
+		}
+
 		f.getManzana().setX(posX);
 		f.getManzana().setY(posY);
 	}

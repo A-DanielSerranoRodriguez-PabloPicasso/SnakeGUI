@@ -97,8 +97,6 @@ public class MySnakeFrame extends JFrame {
 	// han pulsado el botón de start, hay que ponerlo todo en orden.
 	public void empezarDeNuevo(int x, int y) {
 		snake = new Serpiente(); // nueva y flamante serpiente
-		snake.getSerpiente().get(0).setX(x/2);
-		snake.getSerpiente().get(0).setY(y/2);
 		jugando = true; // estamos jugando a partir de ¡YA!
 		mostrarFinal = false; // ni estamos al final ni mucho menos
 		mostrado = false; // hemos mostrado el msg de final
@@ -117,12 +115,12 @@ public class MySnakeFrame extends JFrame {
 			}
 			for (Cuadrado parte : this.snake.getSerpiente()) {
 				if (parte.getX() < 0)
-					parte.setX(iAncho-parte.getLado());
+					parte.setX(iAncho - parte.getLado() - 6);
 				if (parte.getY() < 0)
-					parte.setY(iAlto-parte.getLado());
-				if (parte.getX() == iAncho)
+					parte.setY(iAlto - parte.getLado() - 5);
+				if (parte.getX() == iAncho || parte.getX() + parte.getLado() >= iAncho + 1)
 					parte.setX(0);
-				if (parte.getY() == iAlto)
+				if (parte.getY() == iAlto || parte.getY() + parte.getLado() >= iAlto + 1)
 					parte.setY(0);
 			}
 		}
